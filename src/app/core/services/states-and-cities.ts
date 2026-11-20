@@ -14,10 +14,12 @@ import { CitiesListResponse, ICitiesResponse } from '../../shared/models/cities-
 export class StatesAndCitiesApi {
   private readonly _httpClient = inject(HttpClient);
 
-  getStates() {
-    return this._httpClient.post('https://countriesnow.space/api/v0.1/countries/states', {
-      country: 'Brazil',
-    });
+  getStates(): Observable<StatesListResponse> {
+    return this._httpClient
+      .post<IStatesResponse>('https://countriesnow.space/api/v0.1/countries/states', {
+        country: 'Brazil',
+      })
+      .pipe(map((response) => response.data.states));
   }
 
   getCities(state: string): Observable<CitiesListResponse> {
