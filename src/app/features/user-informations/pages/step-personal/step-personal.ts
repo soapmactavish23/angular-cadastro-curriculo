@@ -1,7 +1,7 @@
 import { Component, inject } from '@angular/core';
-import { RouterLink } from '@angular/router';
 import { CurriculumFormStore } from '../../../../core/services/curriculum-form-store';
 import { ReactiveFormsModule } from '@angular/forms';
+import { Router, RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-step-personal',
@@ -10,6 +10,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 })
 export class StepPersonal {
   readonly _curriculumFormStore = inject(CurriculumFormStore);
+  private readonly _router = inject(Router);
 
   ngOnInit() {
     console.log('Personal Form Group:', this._curriculumFormStore.personalFormGroup);
@@ -17,5 +18,9 @@ export class StepPersonal {
 
   logPersonal() {
     console.log('Personal Value:', this._curriculumFormStore.personalFormGroup.value);
+  }
+
+  goToProfessional() {
+    this._router.navigate(['/professional']);
   }
 }
