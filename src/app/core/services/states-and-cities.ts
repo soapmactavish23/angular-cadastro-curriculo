@@ -6,6 +6,7 @@ import {
   StatesListResponse,
 } from '../../shared/models/states-response';
 import { map, Observable } from 'rxjs';
+import { CitiesListResponse, ICitiesResponse } from '../../shared/models/cities-response';
 
 @Injectable({
   providedIn: 'root',
@@ -19,12 +20,12 @@ export class StatesAndCitiesApi {
     });
   }
 
-  getCities(state: string): Observable<StatesListResponse> {
+  getCities(state: string): Observable<CitiesListResponse> {
     return this._httpClient
-      .post<IStatesResponse>('https://countriesnow.space/api/v0.1/countries/state/cities', {
+      .post<ICitiesResponse>('https://countriesnow.space/api/v0.1/countries/state/cities', {
         country: 'Brazil',
         state: state,
       })
-      .pipe(map((statesResponse) => statesResponse.data.states));
+      .pipe(map((citiesResponse) => citiesResponse.data));
   }
 }
