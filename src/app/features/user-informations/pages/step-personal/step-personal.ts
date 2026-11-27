@@ -4,6 +4,7 @@ import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { StatesAndCitiesApi } from '../../../../core/services/states-and-cities';
 import { rxResource, toSignal } from '@angular/core/rxjs-interop';
+import { tap } from 'rxjs';
 
 @Component({
   selector: 'app-step-personal',
@@ -19,9 +20,18 @@ export class StepPersonal {
     return this._curriculumFormStore.personalFormGroup.get('state') as FormControl;
   }
 
-  selectedState = toSignal<string>(this.stateControl!.valueChanges, {
-    initialValue: this.stateControl!.value || '',
-  });
+  get cityControl() {
+    return this._curriculumFormStore.personalFormGroup.get('city') as FormControl;
+  }
+
+  selectedState = toSignal<string>(
+    this.stateControl!.valueChanges.pipe(
+      tap(() => this.cityControl.setValue('', { emitEvent: false })),
+    ),
+    {
+      initialValue: this.stateControl!.value || '',
+    },
+  );
 
   citiesResource = rxResource({
     params: () => {
