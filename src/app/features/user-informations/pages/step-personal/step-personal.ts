@@ -19,14 +19,27 @@ export class StepPersonal {
     return this._curriculumFormStore.personalFormGroup.get('state') as FormControl;
   }
 
-  stateSelected = toSignal<string>(this.stateControl!.valueChanges, {
+  selectedState = toSignal<string>(this.stateControl!.valueChanges, {
     initialValue: this.stateControl!.value || '',
   });
 
-  testeState = computed(() => {
-    console.log('Estado selecionado:', this.stateSelected());
+  citiesResource = rxResource({
+    params: () => {
+      const state = this.selectedState();
 
-    return '';
+      if (!state) return undefined;
+
+      return state;
+    },
+    stream: ({ params }) => this._statesAndCitiesApi.getCities(params),
+  });
+
+  citiesList = computed(() => {
+    const ERROR_ON_RESPONSE = !!this.citiesResource.error();
+
+    if (ERROR_ON_RESPONSE) return [];
+
+    return this.citiesResource.value();
   });
 
   statesResource = rxResource({
